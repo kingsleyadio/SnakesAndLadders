@@ -1,0 +1,65 @@
+SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		JComponent glassPane = (JComponent) GameWindow.this.getGlassPane();
+		glassPane.setVisible(true);
+		Graphics g = glassPane.getGraphics();
+		Graphics2D g2D = (Graphics2D) g;
+		Rectangle bounds = GameWindow.this.getBounds();
+		g2D.clearRect(bounds.x, bounds.y + GameWindow.this.getJMenuBar().getHeight(), bounds.width, bounds.height);
+
+		for (int a = 0; a < 10; a++) {
+		    for (int b = 0; b < 10; b++) {
+			if (boardData[a][b] == null) {
+			    //do nothing
+			} else {
+			    CellImpl presentCell = (CellImpl) gameBoard.getCell(gameBoard.getAddressFor(a, b));
+			    CellImpl destinationCell = (CellImpl) gameBoard.getCell(boardData[a][b].getDestination());
+			    //Point p = gameBoard.getLocation();
+			    //System.out.println("[" + p.x + ", " + p.y + "]");
+			    
+			    //System.out.println("destcell: " + destinationCell);
+			    Point presentPoint = presentCell.getLocation();
+			    Point destinationPoint = destinationCell.getLocation();
+			    
+			    System.out.println(presentPoint);
+
+			    if (boardData[a][b].getType() == GameFeatureType.LADDER) {
+				g2D.setColor(Color.BLUE);
+			    } else {
+				//this means we have a snake
+				g2D.setColor(Color.RED);
+			    }
+
+			    g2D.drawLine(presentPoint.x + 20, presentPoint.y + 20,
+				    destinationPoint.x + 20, destinationPoint.y + 20);
+			}
+		    }
+		}
+	    }
+	});
+
+
+
+
+Properties highScores = fetchHighScores();
+	JDialog dialog = new JDialog(GameWindow.getInstance(), "Highscores");
+	dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+	JScrollPane scroller = new JScrollPane();
+	JLabel highScoreLabel = new JLabel();
+        highScoreLabel.setSize(200, 300);
+	
+	StringBuilder sb = new StringBuilder();
+	for (Object element : highScores.keySet()) {
+	    //output just the first 20 characters of the player name.
+	    String name = element.toString().substring(0, 19);
+	    String data = name + "\t\t" 
+		    + highScores.getProperty(element.toString());
+	    sb.append(data).append("\n");
+	}
+	highScoreLabel.setText(sb.toString());
+	scroller.add(highScoreLabel);
+	dialog.add(scroller);
+        dialog.pack();
+	dialog.setVisible(true);

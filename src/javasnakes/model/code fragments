@@ -1,0 +1,34 @@
+public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+        Image gameSnake = null;
+        try {
+            gameSnake = ImageIO.read(getClass().getResourceAsStream("/game_snake.png"));
+        } catch (IOException ex) {
+            Exceptions.attachMessage(ex, "Unable to load the wallpaper for the main page.");
+            Exceptions.printStackTrace(ex);
+        }
+        g2D.drawImage(gameSnake, 0, 0, this.getSize().width, this.getSize().height, this);
+    }
+
+
+int myX = 0;
+	for (Seed element : seedSet) {
+	    
+	    if (element == Seed.BLACK_SEED) {
+		g2D.setColor(Color.BLACK);
+	    } else if (element == Seed.RED_SEED) {
+		g2D.setColor(Color.red);
+	    }
+	    else {
+		g2D.setColor(Color.WHITE);
+	    }
+	    
+	    g2D.fillOval(myX, 0, myX + 70, 70);
+	    myX += 80;
+	}
+
+
+
+
+
